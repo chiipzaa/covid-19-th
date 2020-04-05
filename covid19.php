@@ -154,6 +154,11 @@ function objectToArray($d) {
       return $d;
   }
 }
+$response1=GET_Service_Covid19('cases/sum');
+$result_array1 = json_decode($response1);	
+$rr1= objectToArray($result_array1);
+// print_r($rr1);
+extract($rr1);
 
 $response=GET_Service_Covid19('today');
 $result_array = json_decode($response);	
@@ -161,11 +166,7 @@ $rr= objectToArray($result_array);
 // print_r($rr);
 extract($rr);
 
-$response1=GET_Service_Covid19('cases/sum');
-$result_array1 = json_decode($response1);	
-$rr1= objectToArray($result_array1);
-// print_r($rr1);
-extract($rr1);
+
 
 $query_areacode="SELECT changwatcode,changwatname,changwatname_en  FROM cchangwat ORDER BY changwatcode";
 $query = $db->prepare($query_areacode );
