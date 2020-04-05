@@ -212,6 +212,9 @@ $data_json=json_encode($out2,true);
 <body>
   <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
     <h5 class="my-0 mr-md-auto font-weight-normal">COVID-19</h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+    <a class="p-2 text-dark" href="http://covid19.ddc.moph.go.th/th/self_screening" target="_blank">ทดสอบประเมินความเสี่ยง</a>
+  </nav>
     <a class="btn btn-outline-primary" href="https://github.com/chiipzaa/covid-19-th" target="_blank"><i
         class="fab fa-github-alt"></i> Code</a>
   </div>

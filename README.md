@@ -6,3 +6,6 @@
 
 ## หน้าตา
 ![screenshot](screenshot.png)
+
+##
+* หากพบข้อผิดพลาดหรือช่องโหว่ความปลอดภัย (Programming bug & Security Vulnerabilities) หรือคุณสมบัติอื่น ๆ ที่อยากเพิ่มเติมในอนาคต สามารถแจ้งมาให้ได้ที่ GitHub Issues -> https://github.com/chiipzaa/covid-19-th/issues
