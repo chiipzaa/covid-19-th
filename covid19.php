@@ -212,7 +212,7 @@ $data_json=json_encode($out2,true);
 <body>
   <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
     <h5 class="my-0 mr-md-auto font-weight-normal">COVID-19</h5>
-    <a class="btn btn-outline-primary" href="https://github.com/chiipzaa/" target="_blank"><i
+    <a class="btn btn-outline-primary" href="https://github.com/chiipzaa/covid-19-th" target="_blank"><i
         class="fab fa-github-alt"></i> Code</a>
   </div>
 
