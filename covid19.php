@@ -449,6 +449,24 @@ $data_json=json_encode($out2,true);
 
     </div>
 
+    <hr style="border: 2px solid #808080;border-radius: 5px;">
+    <span>
+      <h5>&nbsp;&nbsp;สถิติทั่วไป</h5>
+    </span>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="chart-confirm"></div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+      <div id="chart-timeline"></div>
+      </div>
+
+    </div>
+    
+
 
 
 
@@ -486,6 +504,12 @@ $data_json=json_encode($out2,true);
 <script src="src/gis/plugins/map/lib/leaflet.js"></script>
 <script src="src/gis/plugins/map/lib/leaflet-LabelOverlay.js"></script>
 <script src="src/gis/plugins/map/lib/leaflet.label.js" type="text/javascript"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.18.0/apexcharts.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-apexcharts"></script>
 
 <script>
 $(document).ready(function() {
@@ -808,6 +832,199 @@ function goBack() {
   }
 }
 /////////////////////////////////////////////////////////////map
+</script>
+
+<script>
+  $( document ).ready(function() {
+        loadTimeline();
+        // loadSum();
+    });
+  ////////////////////////////////////////////////////////////chart
+  var data_timeline = [];
+
+  function generateMultiPleTimelineChart(_id,_name,_name_1,_color_1,_arr_1,_name_2,_color_2,_arr_2,_name_3,_color_3,_arr_3,_name_4,_color_4,_arr_4){
+        var options = {
+        series: [{
+        name: _name_1,
+        data: convertValueNumber(_arr_1)
+        },{
+        name: _name_2,
+        data: convertValueNumber(_arr_2)
+        },{
+        name: _name_3,
+        data: convertValueNumber(_arr_3)
+        },{
+        name: _name_4,
+        data: convertValueNumber(_arr_4)
+        }],
+        chart: {
+        type: 'area',
+        id: _id,
+        group: 'timeline',
+        stacked: false,
+        //fontFamily: 'Conv_Athiti-bd',
+
+        height: 300,
+        zoom: {
+            type: 'x',
+            enabled: true,
+            autoScaleYaxis: true
+        },
+        toolbar: {
+            autoSelected: 'zoom'
+        }
+        },
+        dataLabels: {
+        enabled: false
+        },
+        markers: {
+        size: 0,
+        },
+        title: {
+        text: _name,
+        align: 'left'
+        },
+        colors: [_color_1,_color_2,_color_3,_color_4],
+        fill: {
+        type: 'gradient',
+        gradient: {
+            shadeIntensity: 1,
+            inverseColors: false,
+            opacityFrom: 0.5,
+            opacityTo: 0,
+            stops: [0, 90, 100]
+        },
+        },
+        yaxis: {
+        title: {
+            text: ''
+             },
+        },
+        xaxis: {
+            min: new Date(moment().subtract(30,'d')).getTime(),
+            type: 'datetime',
+        },
+        tooltip: {
+            shared: false,
+            y: {
+                formatter: function (val) {
+                return val+' '
+                }
+            }
+        }
+        };
+
+        return options;
+    }
+
+    function covertTimelineData(_name,_arr){
+        var arr = [];
+        for(var i=0;i<_arr.length;i++){
+            var obj = {
+                'date' : moment(_arr[i]['Date']).format("YYYY-MM-DD"),
+                'value' : _arr[i][_name]
+            }
+            arr.push(obj);
+        }
+        return arr;
+    }
+
+
+  function convertValueNumber(arr){
+        var _arr = [];
+        for(var i=0;i<arr.length;i++){
+        arr[i]['value'] = Number(arr[i]['value']);
+        _arr.push([arr[i]['date'],arr[i]['value']])
+        }
+        return _arr;
+    }
+
+  function loadTimeline(){
+        $.ajax({
+            dataType: "json",
+            url: 'https://covid19.th-stat.com/api/open/timeline',
+            method: "GET",
+            async: false,
+            success : function(data){
+                data_timeline = data.Data;
+                setTimelineData()
+            }
+        });
+        
+    }
+
+    function setTimelineData(){
+        var chart_timeline = new ApexCharts(document.querySelector("#chart-timeline"), 
+        generateMultiPleTimelineChart('timeline','แยกตามช่วงเวลา'
+        ,'ติดเชื้อสะสม','#e1298e',covertTimelineData('Confirmed',data_timeline)
+        ,'หายแล้ว','#046034',covertTimelineData('Recovered',data_timeline)
+        ,'รักษาอยู่ใน รพ.','#179c9b',covertTimelineData('Hospitalized',data_timeline)
+        ,'เสียชีวิต','#666666',covertTimelineData('Deaths',data_timeline)
+        ));
+        chart_timeline.render();
+        setLineNeConfirm();
+    }
+
+    function setLineNeConfirm(){
+        var options = {
+          series: [{
+          name: 'อัตราการพบผู้ป่วยใหม่',
+          data: convertValueNumber(covertTimelineData('NewConfirmed',data_timeline))
+        }],
+          chart: {
+          height: 200,
+          type: 'line',
+        },
+        stroke: {
+          width: 7,
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'datetime',
+          min: new Date(moment().subtract(30,'d')).getTime(),
+        },
+        title: {
+          text: 'อัตราการพบผู้ป่วยใหม่',
+          align: 'left',
+          style: {
+            fontSize: "16px",
+            color: '#666'
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'dark',
+            gradientToColors: [ '#046034'],
+            shadeIntensity: 1,
+            type: 'horizontal',
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 100, 100, 100]
+          },
+        },
+        markers: {
+          size: 4,
+          colors: ["#e1298e"],
+          strokeColors: "#fff",
+          strokeWidth: 2,
+          hover: {
+            size: 7,
+          }
+        },
+        yaxis: {
+          title: {
+            text: '',
+          },
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-confirm"), options);
+        chart.render();
+    }
+
+
+
 </script>
 
 </html>
