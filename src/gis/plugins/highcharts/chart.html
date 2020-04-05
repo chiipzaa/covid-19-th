@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+                <script src="../../js/jquery.min.js" type="text/javascript"></script>
+		<style type="text/css">
+		</style>
+		<script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        //subtitle: {
+        //    text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
+        //},
+        credits: {
+            enabled: false
+	},
+        colors:['#d33724','#008d4c','#008d4c','#d33724','#d33724','#008d4c','#008d4c','#d33724','#d33724','#008d4c','#008d4c','#d33724','#d33724','#d33724'] ,
+        plotOptions:{
+                series:{
+                        colorByPoint:true	
+                }
+        },
+        xAxis: {
+            //type: 'category',
+            categories: [ 'เขต 1' , ' เขต 2 ' , ' เขต 3 ' , ' เขต 4 ' , ' เขต 5 ', ' เขต 6 ' , ' เขต 7 ' , ' เขต 8 ' , ' เขต 9 ', ' เขต 10 ' , ' เขต 11 ' , ' เขต 12 ' , ' เขต 13 ' ] ,
+            labels: {
+                rotation: -45,
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            max:100,
+            title: {
+                text: 'KPI (ร้อยละ)'
+            }
+            ,plotLines: [{
+                value:  73 ,
+                color: '#0647DF',
+                dashStyle : 'shortdash',
+                width: 2,
+
+                label: {
+                        text: '73',
+                        align: 'center', //left
+                        style: {
+                                color: 'black'
+                        }
+                }
+            }]    
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: '<b>{point.y:.1f} millions</b>'
+        },
+        series: [{
+            name: 'Population',
+            data: [ 63.7, 16.1, 14.2, 8.9, 40.9, 16.1, 14.2, 8.9, 40.9, 16.1, 14.2, 40.9,77],
+            dataLabels: {
+                enabled: true,
+                rotation: -90,
+                color: '#FFFFFF',
+                align: 'right',
+                format: '{point.y:.1f}', // one decimal
+                y: 10, // 10 pixels down from the top
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        }]
+    });
+});
+		</script>
+	</head>
+	<body>
+<script src="js/highcharts.js"></script>
+
+<div id="container" style="min-width: 300px; height: 280px; margin: 0 auto"></div>
+
+	</body>
+</html>

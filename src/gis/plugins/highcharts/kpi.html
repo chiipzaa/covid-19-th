@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+                <script src="../../js/jquery.min.js" type="text/javascript"></script>
+		<style type="text/css">
+		</style>
+		<script type="text/javascript">
+function dial(divid ,leftColor , rightColor , target ,result){
+    if(result==null){
+        result =0;
+    }
+    var options = {
+            chart: {
+                renderTo: divid,
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                height: 128
+                //height: 150
+            },
+
+            title: {
+                text: null
+            },
+
+            credits:{
+                enabled: false
+            },
+
+            pane: {
+                center: ['50%', '85%'],
+                startAngle: -90,
+                endAngle: 90,
+                background:null,
+                size: 190
+            },
+
+            // the value axis
+            yAxis: {
+                min: 0,
+                max: 100,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 1,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 15,
+                tickColor: '#666',
+                labels: {
+                    step: 2,
+                    rotation: 'auto'
+                },
+                title: {
+                    text: 'ร้อยละ '+ result
+                },
+                plotBands: [{
+                    from: 0,
+                    to: target,
+                    color: leftColor // green
+                }, {
+                    from: target,
+                    to: 100,
+                    color: rightColor // red
+                }]        
+            },
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                    dial: {
+                        radius: '100%'
+                    }
+                }
+            },
+
+            series: [{
+                name: 'ร้อยละ',
+                data: [result]
+//                            tooltip: {
+//                                valueSuffix: ' ไม่เกิน 10'
+//                            }
+            }],
+
+            exporting :{
+                enabled: false
+            }
+
+          };
+        var chart = new Highcharts.Chart(options);          
+    }//function dial
+    
+$(function () {
+    dial("container" ,"#d33724" , "#008d4c" , 73 ,85)
+});
+		</script>
+	</head>
+        <body style=" margin: 0 0">
+<script src="js/highcharts.js"></script>
+<script src="js/highcharts-more.js"></script>
+
+<div id="container" style="min-width: 300px; height:auto; margin: 0 auto"></div>
+
+	</body>
+</html>
