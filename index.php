@@ -465,6 +465,15 @@ $data_json=json_encode($out2,true);
       </div>
 
     </div>
+
+    <div class="row col-md-12">
+    <div class="col-md-6">
+    <div id="chart-nation"></div>
+    </div>
+    <div class="col-md-6">
+    <div id="chart-gender"></div>
+    </div>
+    </div>
     
 
 
@@ -837,7 +846,7 @@ function goBack() {
 <script>
   $( document ).ready(function() {
         loadTimeline();
-        // loadSum();
+        loadSum();
     });
   ////////////////////////////////////////////////////////////chart
   var data_timeline = [];
@@ -862,7 +871,8 @@ function goBack() {
         id: _id,
         group: 'timeline',
         stacked: false,
-        //fontFamily: 'Conv_Athiti-bd',
+        fontFamily: 'Mitr',
+       
 
         height: 300,
         zoom: {
@@ -969,11 +979,13 @@ function goBack() {
         var options = {
           series: [{
           name: 'อัตราการพบผู้ป่วยใหม่',
-          data: convertValueNumber(covertTimelineData('NewConfirmed',data_timeline))
+          data: convertValueNumber(covertTimelineData('NewConfirmed',data_timeline)),
+
         }],
           chart: {
           height: 200,
           type: 'line',
+          fontFamily: 'Mitr',
         },
         stroke: {
           width: 7,
@@ -987,8 +999,9 @@ function goBack() {
           text: 'อัตราการพบผู้ป่วยใหม่',
           align: 'left',
           style: {
-            fontSize: "16px",
-            color: '#666'
+          	fontFamily: 'Mitr',
+            // fontSize: "16px",
+            // color: '#666'
           }
         },
         fill: {
@@ -1022,6 +1035,130 @@ function goBack() {
         var chart = new ApexCharts(document.querySelector("#chart-confirm"), options);
         chart.render();
     }
+
+    function loadSum(){
+        $.ajax({
+            dataType: "json",
+            url: 'https://covid19.th-stat.com/api/open/cases/sum',
+            method: "GET",
+            async: false,
+            success : function(data){
+                data_cases_sum = data;
+                setBarNation()
+                setBarGender()
+            }
+        });
+        
+    }
+
+    function setBarGender(){
+        var data = [];
+        var label = [];
+        var max = 0;
+        var other = 0;
+        for(var n in data_cases_sum['Gender']){
+            max++
+            if(max<=5){
+                data.push(data_cases_sum['Gender'][n]);
+                label.push(n);
+            }else{
+                other++;
+            }
+        }
+
+        var options = {
+            series: [{
+                name: '',
+                data: data
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                fontFamily: 'Mitr',
+            },
+            title: {
+                text: 'เพศ',
+                align: 'left'
+            },
+            colors: ['#046034','#e1298e','#cccccc'],
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    distributed: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: label,
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-gender"), options);
+        chart.render();
+    
+    }
+
+    function setBarNation(){
+        var data = [];
+        var label = [];
+        var max = 0;
+        var other = 0;
+        for(var n in data_cases_sum['Nation']){
+            max++
+            if(max<=5){
+                data.push(data_cases_sum['Nation'][n]);
+                label.push(n);
+            }else{
+                other++;
+            }
+        }
+        data.push(other);
+        label.push('Other');
+
+        var options = {
+            series: [{
+                name: '',
+                data: data
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                fontFamily: 'Mitr',
+            },
+            title: {
+                text: 'สัญชาติ',
+                align: 'left'
+            },
+            colors: ['#0b1d7f','#cccccc','#cccccc','#cccccc','#cccccc','#cccccc','#cccccc'],
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    distributed: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: label,
+            },
+            tooltip: {
+                shared: false,
+                y: {
+                    formatter: function (val) {
+                    return val+' '
+                    }
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-nation"), options);
+        chart.render();
+      
+    }
+
 
 
 
